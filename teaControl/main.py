@@ -35,7 +35,7 @@ def run(settings: Dict[str, Any]) -> None:
 
 
 def testSensors() -> None:
-    with TestMachine() as machine:
+    with Machine() as machine:
         while True:
             inputs = machine.getSensorValues()
             print(inputs)
@@ -43,10 +43,10 @@ def testSensors() -> None:
 
 
 def testControls() -> None:
-    with TestMachine() as machine:
+    with Machine() as machine:
         outputs = Outputs(Motor.Halt, Plate.Off)
         while True:
-            inp = input("Up/Down/Halt/On/Off")
+            inp = input("Up/Down/Halt/On/Off:\n")
             if inp == "Up":
                 outputs.motor = Motor.Up
             if inp == "Down":
@@ -54,16 +54,14 @@ def testControls() -> None:
             if inp == "Halt":
                 outputs.motor = Motor.Halt
             if inp == "On":
-                outputs.motor = Plate.On
+                outputs.plate = Plate.On
             if inp == "Off":
-                outputs.motor = Plate.Off
-            machine.controlDevices(outputs)
+                outputs.plate = Plate.Off
+            print(outputs)
+            machine.controlDevices(outputs, force=True)
 
 
-settings = {"steepTemperature": 80, "steepTime": 120, "keepWarm": True}
-run(settings)
-
-
+print(sys.argv)
 if len(sys.argv) == 2 and sys.argv[1] == "sensors":
     testSensors()
 if len(sys.argv) == 2 and sys.argv[1] == "controls":

@@ -41,8 +41,10 @@ class Machine:
         back = self.readPin(TOUCH_SENSOR_BACK_PIN)
         return Inputs(top=top, bottom=bottom, back=back, temp=temp)
 
-    def controlDevices(self, controls: Outputs) -> None:
-        if controls.motor != self.currentState.motor:
+    def controlDevices(self, controls: Outputs, force: bool = False) -> None:
+        print(self.currentState)
+        if force or controls.motor != self.currentState.motor:
+            print(controls.motor)
             if controls.motor == Motor.Up:
                 self.motorUp()
             if controls.motor == Motor.Down:
@@ -57,19 +59,18 @@ class Machine:
         return GPIO.input(pin)
 
     def motorUp(self) -> None:
-        print("Putting sieve in")
         GPIO.output(MOTOR_A_PIN, GPIO.HIGH)
         GPIO.output(MOTOR_B_PIN, GPIO.LOW)
         GPIO.output(MOTOR_E_PIN, GPIO.HIGH)
 
     def motorDown(self) -> None:
-        print("Taking sieve out")
         GPIO.output(MOTOR_A_PIN, GPIO.LOW)
         GPIO.output(MOTOR_B_PIN, GPIO.HIGH)
         GPIO.output(MOTOR_E_PIN, GPIO.HIGH)
 
     def motorHalt(self) -> None:
-        print("Seeping.")
+        GPIO.output(MOTOR_A_PIN, GPIO.LOW)
+    GPIO.output(MOTOR_B_PIN, GPIO.LOW)
         GPIO.output(MOTOR_E_PIN, GPIO.LOW)
 
     def turnRelayOn(self) -> None:
@@ -137,6 +138,7 @@ class Machine:
 
     def __exit__(self, type: Any, value: Any, traceback: Any) -> Any:
         """Make sure we turn the plate off and clean up GPIO pins whenever we shut down."""
+        self.motorHalt()
         if self.currentState.plate == Plate.On:
             self.switchPlateState()
         GPIO.cleanup()
