@@ -34,7 +34,8 @@ class Machine:
         self.bus = SMBus(1)
 
     def getSensorValues(self) -> Inputs:
-        temp = self.tryRead(self.readObjectTempStable)
+        # temp = self.tryRead(self.readObjectTempStable)
+        temp = 5
         top = self.readPin(TOUCH_SENSOR_TOP_PIN)
         bottom = self.readPin(TOUCH_SENSOR_BOTTOM_PIN)
         back = self.readPin(TOUCH_SENSOR_BACK_PIN)
@@ -132,7 +133,7 @@ class Machine:
         GPIO.setup(TOUCH_SENSOR_TOP_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.setup(TOUCH_SENSOR_BOTTOM_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.setup(TOUCH_SENSOR_BACK_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.setup(RELAY_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        return self
 
     def __exit__(self, type: Any, value: Any, traceback: Any) -> Any:
         """Make sure we turn the plate off and clean up GPIO pins whenever we shut down."""

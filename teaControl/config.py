@@ -14,7 +14,7 @@ MOTOR_B_PIN = 18
 MOTOR_E_PIN = 22
 TOUCH_SENSOR_BOTTOM_PIN = 24
 TOUCH_SENSOR_TOP_PIN = 26
-TOUCH_SENSOR_BACK_PIN = 28
+TOUCH_SENSOR_BACK_PIN = 26
 RELAY_PIN = 15
 
 PLATE_SWITCH_TIMEOUT = 0.5 # How long we should keep the "button pressed" for the place to recognize it
