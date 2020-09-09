@@ -41,13 +41,15 @@ class Machine:
         return Inputs(top=top, bottom=bottom, back=back, temp=temp)
 
     def controlDevices(self, controls: Outputs) -> None:
-        if controls.motor != self.currentState:
+        if controls.motor != self.currentState.motor:
             if controls.motor == Motor.Up:
                 self.motorUp()
             if controls.motor == Motor.Down:
                 self.motorDown()
             if controls.motor == Motor.Halt:
                 self.motorHalt()
+        if controls.plate != self.currentState.plate:
+            self.switchPlateState()
         self.currentState = controls
 
     def readPin(self, pin: int) -> bool:
