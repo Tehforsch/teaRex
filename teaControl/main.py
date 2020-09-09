@@ -1,8 +1,9 @@
 from typing import Dict, Any
+import sys
 import time
 
 from teaControl import teaProgram
-from teaControl.machineDefinition import Inputs, Outputs
+from teaControl.machineDefinition import Inputs, Outputs, Motor, Plate
 from teaControl.testMachine import TestMachine
 from teaControl.hardwareMachine import Machine
 
@@ -33,5 +34,40 @@ def run(settings: Dict[str, Any]) -> None:
             time.sleep(0.10)
 
 
+def testSensors() -> None:
+    with TestMachine() as machine:
+        while True:
+            inputs = machine.getSensorValues()
+            print(inputs)
+            time.sleep(1)
+
+
+def testControls() -> None:
+    with TestMachine() as machine:
+        outputs = Outputs(Motor.Halt, Plate.Off)
+        while True:
+            inp = input("Up/Down/Halt/On/Off")
+            if inp == "Up":
+                outputs.motor = Motor.Up
+            if inp == "Down":
+                outputs.motor = Motor.Down
+            if inp == "Halt":
+                outputs.motor = Motor.Halt
+            if inp == "On":
+                outputs.motor = Plate.On
+            if inp == "Off":
+                outputs.motor = Plate.Off
+            machine.controlDevices(outputs)
+
+
 settings = {"steepTemperature": 80, "steepTime": 120, "keepWarm": True}
 run(settings)
+
+
+if len(sys.argv) == 2 and sys.argv[1] == "sensors":
+    testSensors()
+if len(sys.argv) == 2 and sys.argv[1] == "controls":
+    testControls()
+else:
+    settings = {"steepTemperature": 80, "steepTime": 120, "keepWarm": True}
+    run(settings)
