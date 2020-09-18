@@ -34,8 +34,7 @@ class Machine:
         self.bus = SMBus(1)
 
     def getSensorValues(self) -> Inputs:
-        # temp = self.tryRead(self.readObjectTempStable)
-        temp = 5
+        temp = self.tryRead(self.readObjectTempStable)
         top = self.readPin(TOUCH_SENSOR_TOP_PIN)
         bottom = self.readPin(TOUCH_SENSOR_BOTTOM_PIN)
         back = self.readPin(TOUCH_SENSOR_BACK_PIN)
@@ -53,24 +52,24 @@ class Machine:
                 self.motorHalt()
         if controls.plate != self.currentState.plate:
             self.switchPlateState()
-        self.currentState = controls
+        self.currentState = Outputs(controls.motor, controls.plate)
 
     def readPin(self, pin: int) -> bool:
         return GPIO.input(pin)
 
     def motorUp(self) -> None:
-        GPIO.output(MOTOR_A_PIN, GPIO.HIGH)
-        GPIO.output(MOTOR_B_PIN, GPIO.LOW)
-        GPIO.output(MOTOR_E_PIN, GPIO.HIGH)
-
-    def motorDown(self) -> None:
         GPIO.output(MOTOR_A_PIN, GPIO.LOW)
         GPIO.output(MOTOR_B_PIN, GPIO.HIGH)
         GPIO.output(MOTOR_E_PIN, GPIO.HIGH)
 
+    def motorDown(self) -> None:
+        GPIO.output(MOTOR_A_PIN, GPIO.HIGH)
+        GPIO.output(MOTOR_B_PIN, GPIO.LOW)
+        GPIO.output(MOTOR_E_PIN, GPIO.HIGH)
+
     def motorHalt(self) -> None:
         GPIO.output(MOTOR_A_PIN, GPIO.LOW)
-    GPIO.output(MOTOR_B_PIN, GPIO.LOW)
+        GPIO.output(MOTOR_B_PIN, GPIO.LOW)
         GPIO.output(MOTOR_E_PIN, GPIO.LOW)
 
     def turnRelayOn(self) -> None:
