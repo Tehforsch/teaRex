@@ -70,7 +70,7 @@ class Machine:
 
     def motorHalt(self) -> None:
         GPIO.output(MOTOR_A_PIN, GPIO.LOW)
-    GPIO.output(MOTOR_B_PIN, GPIO.LOW)
+        GPIO.output(MOTOR_B_PIN, GPIO.LOW)
         GPIO.output(MOTOR_E_PIN, GPIO.LOW)
 
     def turnRelayOn(self) -> None:

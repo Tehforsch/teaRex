@@ -7,6 +7,8 @@ from teaControl.machineDefinition import Inputs, Outputs, Motor, Plate
 from teaControl.testMachine import TestMachine
 from teaControl.hardwareMachine import Machine
 
+# import teaControl.gui.main
+
 
 def getInputsFromSensors() -> Inputs:
     return Inputs(top=False, bottom=True, back=True, temp=0)
