@@ -47,6 +47,7 @@ def testSensors() -> None:
 def testControls() -> None:
     with Machine() as machine:
         outputs = Outputs(Motor.Halt, Plate.Off)
+        machine.controlDevices(outputs, force=True)
         while True:
             inp = input("Up/Down/Halt/On/Off:\n")
             if inp == "Up":
@@ -62,12 +63,24 @@ def testControls() -> None:
             print(outputs)
             machine.controlDevices(outputs, force=True)
 
+def testRelay() -> None:
+    with Machine() as machine:
+        while True:
+            print("On")
+            machine.turnRelayOn()
+            time.sleep(1)
+            print("Off")
+            machine.turnRelayOff()
+            time.sleep(1)
+
 
 print(sys.argv)
 if len(sys.argv) == 2 and sys.argv[1] == "sensors":
     testSensors()
 if len(sys.argv) == 2 and sys.argv[1] == "controls":
     testControls()
+if len(sys.argv) == 2 and sys.argv[1] == "relay":
+    testRelay()
 else:
     settings = {"steepTemperature": 80, "steepTime": 120, "keepWarm": True}
     run(settings)
