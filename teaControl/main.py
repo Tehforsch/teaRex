@@ -1,13 +1,16 @@
 from typing import Dict, Any
 import sys
 import time
+from threading import Thread
+
+import cherrypy
 
 from teaControl import teaProgram
 from teaControl.machineDefinition import Inputs, Outputs, Motor, Plate
 from teaControl.testMachine import TestMachine
 from teaControl.hardwareMachine import Machine
 
-# import teaControl.gui.main
+from teaControl.gui.index import start
 
 
 def getInputsFromSensors() -> Inputs:
@@ -73,6 +76,15 @@ def testRelay() -> None:
             machine.turnRelayOff()
             time.sleep(1)
 
+def testBrowser() -> None:
+    webServer = Thread(target = start)
+    webServer.start()
+    with Machine() as machine:
+        outputs = Outputs(Motor.Halt, Plate.Off)
+        machine.controlDevices(outputs, force=True)
+
+
+    webServer.join()
 
 print(sys.argv)
 if len(sys.argv) == 2 and sys.argv[1] == "sensors":
@@ -81,6 +93,9 @@ if len(sys.argv) == 2 and sys.argv[1] == "controls":
     testControls()
 if len(sys.argv) == 2 and sys.argv[1] == "relay":
     testRelay()
+if len(sys.argv) == 2 and sys.argv[1] == "browser":
+    testBrowser()
 else:
-    settings = {"steepTemperature": 80, "steepTime": 120, "keepWarm": True}
-    run(settings)
+    # settings = {"steepTemperature": 80, "steepTime": 120, "keepWarm": True}
+    # run(settings)
+    start()
