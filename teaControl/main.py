@@ -10,7 +10,6 @@ from teaControl.hardwareMachine import Machine
 
 from teaControl.gui.gui import Gui
 
-
 def getInputsFromSensors() -> Inputs:
     return Inputs(top=False, bottom=True, back=True, temp=0)
 
@@ -75,19 +74,24 @@ def testRelay() -> None:
             time.sleep(1)
 
 def testGui() -> None:
+    app = Gui.TeaApp()
+    app.run()
+
+def run() -> None:
     with Machine() as machine:
         outputs = Outputs(Motor.Halt, Plate.Off)
         machine.controlDevices(outputs, force=True)
         app = Gui(machine)
 
-print(sys.argv)
 if len(sys.argv) == 2 and sys.argv[1] == "sensors":
     testSensors()
 if len(sys.argv) == 2 and sys.argv[1] == "controls":
     testControls()
 if len(sys.argv) == 2 and sys.argv[1] == "relay":
     testRelay()
+if len(sys.argv) == 2 and sys.argv[1] == "gui":
+    testGui()
 else:
     # settings = {"steepTemperature": 80, "steepTime": 120, "keepWarm": True}
     # run(settings)
-    testGui()
+    run()

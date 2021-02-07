@@ -1,1 +1,1 @@
-DISPLAY=:0 python3 main.py
+DISPLAY=:0 python3 main.py "$@"
