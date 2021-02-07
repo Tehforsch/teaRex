@@ -18,3 +18,5 @@ TOUCH_SENSOR_BACK_PIN = 16
 RELAY_PIN = 7
 
 PLATE_SWITCH_TIMEOUT = 0.5 # How long we should keep the "button pressed" for the place to recognize it
+
+UPDATE_INTERVAL = 1.0 / 10.0

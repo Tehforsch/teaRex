@@ -3,14 +3,12 @@ import sys
 import time
 from threading import Thread
 
-import cherrypy
-
 from teaControl import teaProgram
 from teaControl.machineDefinition import Inputs, Outputs, Motor, Plate
 from teaControl.testMachine import TestMachine
 from teaControl.hardwareMachine import Machine
 
-from teaControl.gui.index import start
+from teaControl.gui.gui import Gui
 
 
 def getInputsFromSensors() -> Inputs:
@@ -76,15 +74,11 @@ def testRelay() -> None:
             machine.turnRelayOff()
             time.sleep(1)
 
-def testBrowser() -> None:
-    webServer = Thread(target = start)
-    webServer.start()
+def testGui() -> None:
     with Machine() as machine:
         outputs = Outputs(Motor.Halt, Plate.Off)
         machine.controlDevices(outputs, force=True)
-
-
-    webServer.join()
+        app = Gui(machine)
 
 print(sys.argv)
 if len(sys.argv) == 2 and sys.argv[1] == "sensors":
@@ -93,9 +87,7 @@ if len(sys.argv) == 2 and sys.argv[1] == "controls":
     testControls()
 if len(sys.argv) == 2 and sys.argv[1] == "relay":
     testRelay()
-if len(sys.argv) == 2 and sys.argv[1] == "browser":
-    testBrowser()
 else:
     # settings = {"steepTemperature": 80, "steepTime": 120, "keepWarm": True}
     # run(settings)
-    start()
+    testGui()
