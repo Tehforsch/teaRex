@@ -41,7 +41,6 @@ class Machine:
         return Inputs(top=top, bottom=bottom, back=back, temp=temp)
 
     def controlDevices(self, controls: Outputs, force: bool = False) -> None:
-        print(self.currentState)
         if force or controls.motor != self.currentState.motor:
             print(controls.motor)
             if controls.motor == Motor.Up:

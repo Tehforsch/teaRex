@@ -7,6 +7,7 @@ from kivy.properties import StringProperty
 from kivy.clock import Clock
 
 from teaControl.config import UPDATE_INTERVAL
+from teaControl.machineDefinition import Outputs, Motor, Plate
 
 WIDTH = 480
 HEIGHT = 320
@@ -19,6 +20,7 @@ Window.show_cursor = False
 class Gui:
     def __init__(self, machine):
         self.app = Gui.TeaApp()
+        self.app.machine = machine
         self.machine = machine
         event = Clock.schedule_interval(self.update_machine, UPDATE_INTERVAL)
 
@@ -29,10 +31,12 @@ class Gui:
         temperature = StringProperty("TEMP")
 
         def motorUp(self, _button):
-            self.temperature = "SO NICE"
+            outputs = Outputs(Motor.Up, Plate.Off)
+            self.machine.controlDevices(outputs, force=True)
 
         def motorDown(self, _button):
-            self.temperature = "SO NOT NICE"
+            outputs = Outputs(Motor.Down, Plate.Off)
+            self.machine.controlDevices(outputs, force=True)
 
         def setTemperature(self, temperature):
             self.temperature = str(temperature)
